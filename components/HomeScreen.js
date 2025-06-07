@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import CharacterCard from "./CharacterCard";
 import SpeciesFilter from "./SpeciesFilter";
 import StatusFilter from "./StatusFilter";
+import 'react-native-gesture-handler';
+
 
 export default function HomeScreen(){
 const [characters, setCharacters] = useState([]);
@@ -10,21 +12,28 @@ const [loading, setLoading] = useState(true);
 const [error, setError] = useState(null);
 const [status, setStatus] = useState('');
 const [species, setSpecies] = useState('');
+const [page,setPage] = useState(1); //current page
+const [nextPage, setNextPage] = useState(true); //does it have next page
+const [isLoadingMore, setIsLoadingMore] = useState(false); //only one request until the previous one is loaded
 
 
 useEffect(() => {
   const fetchData = async() => {
   setLoading(true);
+  setPage(1);
+  setNextPage(true);
   
     try{
   const params = new URLSearchParams();
   if(status) params.append("status", status);
   if(species) params.append("species", species);
+  params.append("page", "1"); //when changing the filter, we reset the page, the presence of the following pages, and the heroes
   
   const url = `https://rickandmortyapi.com/api/character?${params.toString()}`
       const response = await fetch(url);
       const data = await response.json();
-      setCharacters(data.results)
+      setCharacters(data.results);  
+      setNextPage(!!data.info.next);   
     } catch(err) {
       setError(err.message)
     } finally{
@@ -37,6 +46,33 @@ useEffect(() => {
 if(loading) return <ActivityIndicator  size="large"></ActivityIndicator> //loading indicator
 if(error) return <Text>Error: {error}</Text>
   
+
+ const loadMore = async () => {
+  if (!nextPage || isLoadingMore ) return; //we do not load the next page if it does not exist or it is already loading
+
+  setIsLoadingMore(true);
+
+  try {
+    const nextPage = page + 1;
+
+    const params = new URLSearchParams();
+    if(status) params.append("status", status);
+    if(species) params.append("species", species);
+    params.append("page", nextPage.toString());
+
+    const url = `https://rickandmortyapi.com/api/character?${params.toString()}`
+      const response = await fetch(url);
+      const data = await response.json();
+
+      setCharacters(prev=> [...prev, ...data.results]);
+      setPage(nextPage);
+      setNextPage(!!data.info?.next)
+  } catch (err){
+    setError(err.message)
+  } finally {
+    setIsLoadingMore(false)
+  }
+ };
 
 return (
   <SafeAreaView style={styles.container}>
@@ -53,6 +89,7 @@ ListHeaderComponent={
     
   
 }
+onEndReached={loadMore} //runs when we reach the end of the list
   renderItem={({item}) => (
     <CharacterCard {...item}/>
   )}/>
