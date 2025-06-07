@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import CharacterCard from "./CharacterCard";
 import SpeciesFilter from "./SpeciesFilter";
 import StatusFilter from "./StatusFilter";
-import 'react-native-gesture-handler';
-
 
 export default function HomeScreen(){
 const [characters, setCharacters] = useState([]);
@@ -75,9 +73,11 @@ if(error) return <Text>Error: {error}</Text>
  };
 
 return (
+  
   <SafeAreaView style={styles.container}>
   <FlatList  data={characters} 
 ListHeaderComponent={
+
   <View style={styles.filterContainer}>
   <View style={styles.singleFilter}>
   <StatusFilter selected={status} onChange={setStatus} />
@@ -86,13 +86,13 @@ ListHeaderComponent={
   <SpeciesFilter selected={species} onChange={setSpecies} />
   </View>
   </View>
-    
   
 }
 onEndReached={loadMore} //runs when we reach the end of the list
   renderItem={({item}) => (
     <CharacterCard {...item}/>
   )}/>
+ 
   </SafeAreaView>
 )
 }

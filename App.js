@@ -1,5 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
 import HomeScreen from './components/HomeScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import BottomTabs from "./components/BottomTabs";
+import { ThemeProvider } from './components/ThemeContext';
 
 
 
@@ -7,9 +10,12 @@ import HomeScreen from './components/HomeScreen';
 export default function App() {
 
   return (
-    <View style={styles.container}>
-      <HomeScreen/>
-    </View>
+    <ThemeProvider>
+      <NavigationContainer>
+     <BottomTabs/>
+    </NavigationContainer>
+    </ThemeProvider>
+  
   );
 }
 
