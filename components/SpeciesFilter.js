@@ -31,11 +31,11 @@ const styles = StyleSheet.create({
     marginBottom: 8, 
   },
   pickerContainer:{
-    height: 62, 
+    
     justifyContent: "center",
   },
   picker: {
-    height: 32,
+    
     width: "100%",
   },
   text: {

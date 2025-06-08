@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "hooks-in-rn---starter-code",
+    "name": "rick&morty app",
     "slug": "snack-995728d1-9121-4cc6-9409-6cf7019833eb",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splash.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
