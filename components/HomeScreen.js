@@ -4,7 +4,9 @@ import CharacterCard from "./CharacterCard";
 import SpeciesFilter from "./SpeciesFilter";
 import StatusFilter from "./StatusFilter";
 
+
 export default function HomeScreen(){
+
 const [characters, setCharacters] = useState([]);
 const [loading, setLoading] = useState(true);
 const [error, setError] = useState(null);
@@ -107,7 +109,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 16,
     paddingVertical: 12,
-    width: "100%"
+    
   },
   singleFilter:{
     flex:1

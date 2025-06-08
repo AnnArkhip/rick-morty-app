@@ -1,12 +1,15 @@
 import { View, StyleSheet, Image, Text } from "react-native";
+import { useTheme } from "./ThemeContext";
+
 
 export default function CharacterCard({name,status,species,image}){
+  const {darkTheme} = useTheme();
 
   return(
-    <View style={styles.card}>
+    <View style={[styles.card,{ backgroundColor: darkTheme?'#1e1e1e': "white" } ]}>
       <Image source={{uri: image}} style={styles.image}/>
       <View style={styles.details} >
-      <Text style={styles.name}>{name}</Text>
+      <Text style={[{ color: darkTheme?"white": "#333333"  } ]}>{name}</Text>
       <View style={styles.textContainer}>
       <Text style={styles.detailText}>{status}</Text>
       <Text style={styles.detailText}>{species}</Text>
@@ -42,7 +45,6 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: 'white',
     marginBottom: 4,
   },
   details: {
