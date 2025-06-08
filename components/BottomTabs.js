@@ -1,11 +1,11 @@
-import HomeScreen from "./HomeScreen";
 import SettingsScreen from "./SettingsScreen";
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"; 
 import { useTheme } from "./ThemeContext";
+import MainStack from "./MainStack";
 
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator(); //configuring the bottom panel
 export default function BottomTabs(){
   const {darkTheme} = useTheme();
   return(
@@ -15,7 +15,7 @@ export default function BottomTabs(){
       tabBarActiveBackgroundColor: darkTheme ? '#333' : '#fff',
       headerShown: false
     }}>
-            <Tab.Screen name="Main" component={HomeScreen}></Tab.Screen>
+            <Tab.Screen name="Main" component={MainStack}></Tab.Screen>
             <Tab.Screen name="Settings" component={SettingsScreen}></Tab.Screen>
     </Tab.Navigator>
 

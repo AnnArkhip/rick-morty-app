@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import CharacterCard from "./CharacterCard";
 import SpeciesFilter from "./SpeciesFilter";
 import StatusFilter from "./StatusFilter";
+import { useTheme } from './ThemeContext';
 
 
 export default function HomeScreen(){
@@ -15,6 +16,8 @@ const [species, setSpecies] = useState('');
 const [page,setPage] = useState(1); //current page
 const [nextPage, setNextPage] = useState(true); //does it have next page
 const [isLoadingMore, setIsLoadingMore] = useState(false); //only one request until the previous one is loaded
+const {darkTheme} = useTheme();
+
 
 
 useEffect(() => {
@@ -76,7 +79,7 @@ if(error) return <Text>Error: {error}</Text>
 
 return (
   
-  <SafeAreaView style={styles.container}>
+  <SafeAreaView style={[styles.container,{ backgroundColor: darkTheme?"#333333": "white" } ]}>
   <FlatList  data={characters} 
 ListHeaderComponent={
 
@@ -92,7 +95,7 @@ ListHeaderComponent={
 }
 onEndReached={loadMore} //runs when we reach the end of the list
   renderItem={({item}) => (
-    <CharacterCard {...item}/>
+    <CharacterCard item={item}/>
   )}/>
  
   </SafeAreaView>
@@ -102,7 +105,7 @@ onEndReached={loadMore} //runs when we reach the end of the list
 const styles = StyleSheet.create({
   container:{
     flex:1,
-    backgroundColor: "#333333"
+
   },
   filterContainer:{
     flexDirection: "row",

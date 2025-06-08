@@ -1,21 +1,28 @@
-import { View, StyleSheet, Image, Text } from "react-native";
+import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import { useTheme } from "./ThemeContext";
+import { useNavigation } from '@react-navigation/native';
 
 
-export default function CharacterCard({name,status,species,image}){
+export default function CharacterCard({item}){
   const {darkTheme} = useTheme();
+  const navigation = useNavigation();
+
 
   return(
+    <TouchableOpacity
+      onPress={() => navigation.navigate('Details', { character: item })}
+    >
     <View style={[styles.card,{ backgroundColor: darkTheme?'#1e1e1e': "white" } ]}>
-      <Image source={{uri: image}} style={styles.image}/>
+      <Image source={{uri: item.image}} style={styles.image}/>
       <View style={styles.details} >
-      <Text style={[{ color: darkTheme?"white": "#333333"  } ]}>{name}</Text>
+      <Text style={[{ color: darkTheme?"white": "#333333"  } ]}>{item.name}</Text>
       <View style={styles.textContainer}>
-      <Text style={styles.detailText}>{status}</Text>
-      <Text style={styles.detailText}>{species}</Text>
+      <Text style={styles.detailText}>{item.status}</Text>
+      <Text style={styles.detailText}>{item.species}</Text>
       </View>
       </View>
     </View>
+    </TouchableOpacity>
   )
 }
 
