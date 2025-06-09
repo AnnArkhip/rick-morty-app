@@ -1,9 +1,10 @@
-import { FlatList, View, StyleSheet, ActivityIndicator, Text, SafeAreaView } from "react-native";
+import { FlatList, View, StyleSheet, ActivityIndicator, Text, SafeAreaView, Button } from "react-native";
 import { useEffect, useState } from "react";
 import CharacterCard from "./CharacterCard";
 import SpeciesFilter from "./SpeciesFilter";
 import StatusFilter from "./StatusFilter";
 import { useTheme } from './ThemeContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function HomeScreen(){
@@ -17,9 +18,40 @@ const [page,setPage] = useState(1); //current page
 const [nextPage, setNextPage] = useState(true); //does it have next page
 const [isLoadingMore, setIsLoadingMore] = useState(false); //only one request until the previous one is loaded
 const {darkTheme} = useTheme();
+const [offline, setOffline] = useState(false)
 
 
+  const loadCharacters = async () => {
+    try {
+      const res = await fetch('https://rickandmortyapi.com/api/character?page=1');
+      const data = await res.json();
 
+      // saving the first 20 characters
+      await AsyncStorage.setItem('cachedCharacters', JSON.stringify(data.results.slice(0, 20)));
+      setCharacters(data.results);
+      
+    } catch (error) {
+      
+      setOffline(true);
+      setError('No internet connection');
+
+      const cached = await AsyncStorage.getItem('cachedCharacters');
+      if (cached) {
+        setCharacters(JSON.parse(cached));
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadCharacters();
+  }, []);
+
+  const handleRetry = async () => {
+    setError(null);          
+    await loadCharacters(); 
+  };
 useEffect(() => {
   const fetchData = async() => {
   setLoading(true);
@@ -39,6 +71,11 @@ useEffect(() => {
       setNextPage(!!data.info.next);   
     } catch(err) {
       setError(err.message)
+      setOffline(true);
+      const cached = await AsyncStorage.getItem('cachedCharacters');
+      if (cached) {
+        setCharacters(JSON.parse(cached));
+      }
     } finally{
       setLoading(false)
     }
@@ -47,7 +84,14 @@ useEffect(() => {
   },[status, species])  //the effect will work when the data changes in the state
 
 if(loading) return <ActivityIndicator  size="large"></ActivityIndicator> //loading indicator
-if(error) return <Text>Error: {error}</Text>
+if (error) {
+  return (
+    <View >
+      <Text>{error}</Text>
+      <Button title="Try Again" onPress={handleRetry} />
+    </View>
+  );
+}
   
 
  const loadMore = async () => {
@@ -77,9 +121,11 @@ if(error) return <Text>Error: {error}</Text>
   }
  };
 
+
 return (
   
   <SafeAreaView style={[styles.container,{ backgroundColor: darkTheme?"#333333": "white" } ]}>
+   
   <FlatList  data={characters} 
 ListHeaderComponent={
 
