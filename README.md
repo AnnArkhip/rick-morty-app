@@ -1,10 +1,8 @@
- Rick and Morty App
+Rick and Morty App
 
 This is a simple React Native application using the [Rick and Morty API](https://rickandmortyapi.com /) to display a list of characters from a popular animated series.
 
-
-
- 🔍 Functions
+🔍 Functions
 
 - 📃 A list of characters with images and basic information
 - Filtering by:
